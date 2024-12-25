@@ -20,11 +20,13 @@ name = "zero2prod"
 
 
 [dependencies]
-config="0.15.3"
+config="0.15.4"
 actix-web = "4.9.0"
 reqwest = "0.12.9"
 serde = { version = "1.0.216", features = ["derive"] }
 tokio = { version = "1.42.0", features = ["macros", "rt-multi-thread"] }
+uuid ={ version = "1", features = ["v4"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
 
 # Using table-like toml syntax to avoid a super-long line!
 [dependencies.sqlx]
