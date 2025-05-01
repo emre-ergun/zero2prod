@@ -4,7 +4,6 @@
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
-use unicode_segmentation::UnicodeSegmentation;
 use uuid::Uuid;
 
 use crate::domain::{NewSubscriber, SubscriberEmail, SubscriberName};
@@ -44,15 +43,6 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
         Ok(_) => HttpResponse::Ok().finish(),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
-}
-
-pub fn is_valid_name(name: &str) -> bool {
-    let is_empty_or_whitespace = name.trim().is_empty();
-    let is_too_long = name.graphemes(true).count() > 256;
-    let forbiddden_characters = ['/', '(', ')', '<', '>', '\\', '{', '}'];
-    let contains_forbidden_character = name.chars().any(|c| forbiddden_characters.contains(&c));
-
-    !(is_empty_or_whitespace || is_too_long || contains_forbidden_character)
 }
 
 #[tracing::instrument(
