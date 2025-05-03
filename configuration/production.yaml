@@ -6,4 +6,4 @@ database:
   require_ssl: true
 email_client:
   base_url: 'https://api.postmark.com'
-  sender_email: 'something@engramsoft.com'
+  sender_email: 'emreergun@engramsoft.com'
