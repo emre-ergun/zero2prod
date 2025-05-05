@@ -90,7 +90,7 @@ impl ResponseError for SubscribeError {
     fn status_code(&self) -> StatusCode {
         match self {
             SubscribeError::ValidationError(_) => StatusCode::BAD_REQUEST,
-            Self::UnexpectedError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            SubscribeError::UnexpectedError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
@@ -120,7 +120,7 @@ pub async fn send_confirmation_email(
     );
 
     email_client
-        .send_email(new_subscriber.email, "Welcome!", html_body, plain_body)
+        .send_email(&new_subscriber.email, "Welcome!", html_body, plain_body)
         .await
 }
 
