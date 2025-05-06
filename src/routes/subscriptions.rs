@@ -4,8 +4,8 @@ use actix_web::http::StatusCode;
 use actix_web::{web, HttpResponse, ResponseError};
 use anyhow::Context;
 use chrono::Utc;
-use rand::distr::Alphanumeric;
-use rand::{rng, Rng};
+use rand::distributions::Alphanumeric;
+use rand::{thread_rng, Rng};
 use sqlx::{Executor, PgPool, Postgres, Transaction};
 use uuid::Uuid;
 
@@ -209,7 +209,7 @@ impl std::error::Error for StoreTokenError {
 }
 
 fn generate_subscription_token() -> String {
-    let mut rng = rng();
+    let mut rng = thread_rng();
     std::iter::repeat_with(|| rng.sample(Alphanumeric))
         .map(char::from)
         .take(25)

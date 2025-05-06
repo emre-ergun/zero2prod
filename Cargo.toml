@@ -34,9 +34,11 @@ serde-aux = "4.7.0"
 unicode-segmentation = "1.12.0"
 claims = "0.8.0"
 validator = "0.20.0"
-rand={ version = "0.9.1", features = ["std_rng"] }
+rand={ version = "0.8", features = ["std_rng"] }
 thiserror = "2.0.12"
 anyhow = "1.0.98"
+base64 = "0.22.1"
+argon2 = {version = "0.5.3", features = ["std"]}
 
 # Using table-like toml syntax to avoid a super-long line!
 [dependencies.sqlx]
@@ -57,7 +59,7 @@ default-features = false
 features = ["json", "rustls-tls"]
 
 [dev-dependencies]
-fake = "4.3.0"
+fake = "2.9"
 linkify = "0.10.0"
 quickcheck = "1.0.3"
 quickcheck_macros = "1.0.0"
