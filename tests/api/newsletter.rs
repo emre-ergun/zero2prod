@@ -15,7 +15,7 @@ async fn invalid_password_is_rejected() {
     assert_ne!(app.test_user.password, password);
 
     let response = reqwest::Client::new()
-        .post(&format!("{}/newsletters", &app.address))
+        .post(format!("{}/newsletters", &app.address))
         .basic_auth(username, Some(password))
         .json(&serde_json::json!({
         "title": "Newsletter title",
@@ -45,7 +45,7 @@ async fn non_existing_user_is_rejected() {
     let password = Uuid::new_v4().to_string();
 
     let response = reqwest::Client::new()
-        .post(&format!("{}/newsletters", &app.address))
+        .post(format!("{}/newsletters", &app.address))
         .basic_auth(username, Some(password))
         .json(&serde_json::json!({
         "title": "Newsletter title",
