@@ -44,6 +44,7 @@ htmlescape = "0.3.1"
 sha2 = "0.10.9"
 hmac = { version = "0.12.1", features = ["std"] }
 hex = "0.4.3"
+actix-web-flash-messages = { version = "0.5.0", features = ["cookies"] }
 
 # Using table-like toml syntax to avoid a super-long line!
 [dependencies.sqlx]
@@ -61,7 +62,7 @@ features = [
 [dependencies.reqwest]
 version = "0.12"
 default-features = false
-features = ["json", "rustls-tls"]
+features = ["json", "rustls-tls", "cookies"]
 
 [dev-dependencies]
 fake = "2.9"
