@@ -8,6 +8,7 @@ use crate::routes::{
 use actix_web::dev::Server;
 use actix_web::web::Data;
 use actix_web::{web, App, HttpServer};
+use secrecy::Secret;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::net::TcpListener;
@@ -47,6 +48,7 @@ impl Application {
             connection_pool,
             email_client,
             configuration.application.base_url,
+            configuration.application.hmac_secret,
         )?;
 
         Ok(Self { port, server })
@@ -72,12 +74,14 @@ pub fn run(
     db_pool: PgPool,
     email_client: EmailClient,
     base_url: String,
+    hmac_secret: Secret<String>,
 ) -> Result<Server, std::io::Error> {
     // wrap the connection with the smart pointer
     let db_pool = Data::new(db_pool);
     // wrap the email client with the smart pointer
     let email_client = Data::new(email_client);
     let base_url = Data::new(ApplicationBaseUrl(base_url));
+    let hmac_secret = Data::new(HmacSecret(hmac_secret));
     // Capture the connection from the surrounded environment
     let server = HttpServer::new(move || {
         App::new()
@@ -94,9 +98,13 @@ pub fn run(
             // register the emmail client as part of the application state
             .app_data(email_client.clone())
             .app_data(base_url.clone())
+            .app_data(hmac_secret.clone())
     })
     .listen(listener)?
     .run();
 
     Ok(server)
 }
+
+#[derive(Clone)]
+pub struct HmacSecret(pub Secret<String>);
