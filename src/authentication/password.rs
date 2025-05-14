@@ -1,4 +1,4 @@
-//! src/authentication.rs
+//! src/authentication/password.rs
 
 use anyhow::Context;
 use argon2::password_hash::SaltString;
