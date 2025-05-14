@@ -1,6 +1,6 @@
 //! src/routes/admin/password/post.rs
 
-use crate::authentication::{validate_credentials, AuthError, Credentials};
+use crate::authentication::{self, validate_credentials, AuthError, Credentials};
 use crate::routes::admin::dashboard::get_username;
 use crate::session_state::TypedSession;
 use crate::utils::{e500, see_other};
@@ -57,5 +57,12 @@ pub async fn change_password(
             AuthError::UnexpectedError(e) => Err(e500(e)),
         };
     }
-    todo!()
+
+    authentication::change_password(user_id, form.0.new_password, &pool)
+        .await
+        .map_err(e500)?;
+
+    FlashMessage::error("Your password has been changed.").send();
+
+    Ok(see_other("/admin/password"))
 }
