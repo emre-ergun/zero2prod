@@ -19,6 +19,7 @@ env:
   APP_USER: app
   APP_USER_PWD: secret
   APP_DB_NAME: newsletter
+  DATABASE_URL: ${{vars.DATABASE_URL}}
 
 jobs:
   test:
@@ -78,12 +79,11 @@ jobs:
       - name: Migrate database
         run: |
           SKIP_DOCKER=true ./scripts/init_db.sh
+      - name: Run tests
+        run: cargo test
 
       - name: Check that queries are fresh
         run: cargo sqlx prepare --workspace --check -- --all-targets
-
-      - name: Run tests
-        run: cargo test
 
   # `fmt` container job
   fmt:
