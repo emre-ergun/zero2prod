@@ -5,7 +5,7 @@ use crate::configuration::{DatabaseSettings, Settings};
 use crate::email_client::EmailClient;
 use crate::routes::{
     admin_dashboard, change_password, change_password_form, confirm, health_check, home, login,
-    login_form, logout, publish_newsletter, subscribe,
+    login_form, logout, publish_newsletter, publish_newsletter_form, subscribe,
 };
 use actix_session::{storage::RedisSessionStore, SessionMiddleware};
 use actix_web::cookie::Key;
@@ -30,19 +30,7 @@ pub struct Application {
 impl Application {
     pub async fn build(configuration: Settings) -> Result<Application, anyhow::Error> {
         let connection_pool = get_connection_pool(&configuration.database);
-
-        let sender_email = configuration
-            .email_client
-            .sender()
-            .expect("Invalid sender email");
-
-        let timeout = configuration.email_client.timeout();
-        let email_client = EmailClient::new(
-            configuration.email_client.base_url,
-            sender_email,
-            configuration.email_client.authorization_token,
-            timeout,
-        );
+        let email_client = configuration.email_client.client();
 
         // We have removed the hard-coded `8000` - it's now coming from our settings!
         let address = format!(
@@ -119,6 +107,8 @@ pub async fn run(
                     .route("/dashboard", web::get().to(admin_dashboard))
                     .route("/password", web::get().to(change_password_form))
                     .route("/password", web::post().to(change_password))
+                    .route("/newsletters", web::get().to(publish_newsletter_form))
+                    .route("/newsletters", web::post().to(publish_newsletter))
                     .route("/logout", web::post().to(logout)),
             )
             // register the connnection as part of the application state
