@@ -15,7 +15,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   SQLX_VERSION: 0.8.0
-  SQLX_FEATURES: "rustls,postgres"
+  SQLX_FEATURES: 'rustls,postgres'
   APP_USER: app
   APP_USER_PWD: secret
   APP_DB_NAME: newsletter
@@ -79,11 +79,11 @@ jobs:
         run: |
           SKIP_DOCKER=true ./scripts/init_db.sh
 
-      - name: Run tests
-        run: cargo test
-
       - name: Check that queries are fresh
         run: cargo sqlx prepare --workspace --check -- --all-targets
+
+      - name: Run tests
+        run: cargo test
 
   # `fmt` container job
   fmt:
@@ -161,5 +161,5 @@ jobs:
         run: cargo llvm-cov report --html --output-dir coverage
       - uses: actions/upload-artifact@v4
         with:
-          name: "Coverage report"
+          name: 'Coverage report'
           path: coverage/
